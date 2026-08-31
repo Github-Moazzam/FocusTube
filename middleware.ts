@@ -10,6 +10,8 @@ export async function middleware(request: NextRequest) {
     pathname === '/login' ||
     pathname === '/api/auth/login' ||
     pathname === '/api/keep-alive' ||
+    pathname.startsWith('/api/icon') ||
+    pathname === '/sw.js' ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/manifest.json') ||
     pathname.startsWith('/icons')
