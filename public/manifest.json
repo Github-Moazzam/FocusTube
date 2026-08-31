@@ -1,0 +1,16 @@
+{
+  "name": "FocusTube",
+  "short_name": "FocusTube",
+  "description": "Distraction-free YouTube player for focused learning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
