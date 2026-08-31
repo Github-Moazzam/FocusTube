@@ -1,18 +1,19 @@
 'use client';
 
-import { use } from 'react';
+import { use, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, Video, Progress } from '@/lib/storage/db';
-import { getPlaylist, getPlaylistVideos, getAllProgressForPlaylist, softDeletePlaylist } from '@/lib/storage/crud';
+import { getPlaylist, getPlaylistVideos, getAllProgressForPlaylist, softDeletePlaylist, addPlaylistLocally } from '@/lib/storage/crud';
 import { scheduleSync } from '@/lib/storage/sync';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Play, CheckCircle2, MoreVertical, Trash2, ArrowLeft } from 'lucide-react';
+import { Play, CheckCircle2, MoreVertical, Trash2, ArrowLeft, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function PlaylistPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const playlist = useLiveQuery(() => getPlaylist(id), [id]);
   const videos = useLiveQuery(() => getPlaylistVideos(id), [id]);
@@ -57,6 +58,26 @@ export default function PlaylistPage({ params }: { params: Promise<{ id: string 
     }
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      const res = await fetch('/api/playlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playlistId: id }),
+      });
+      if (res.ok) {
+        const { playlist: p, videos: v } = await res.json();
+        await addPlaylistLocally(p, v);
+        scheduleSync(true);
+      }
+    } catch (err) {
+      console.error('Failed to refresh playlist', err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto pb-12">
       <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-50 mb-6 transition-colors">
@@ -78,13 +99,23 @@ export default function PlaylistPage({ params }: { params: Promise<{ id: string 
               {playlist.channel && <p className="text-zinc-400 text-lg mb-4">{playlist.channel}</p>}
             </div>
             
-            <button 
-              onClick={handleDelete}
-              className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-              title="Delete Playlist"
-            >
-              <Trash2 className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors disabled:opacity-50"
+                title="Refresh from YouTube"
+              >
+                <RefreshCw className={cn("w-5 h-5", isRefreshing && "animate-spin")} />
+              </button>
+              <button 
+                onClick={handleDelete}
+                className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                title="Delete Playlist"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           <div className="mb-8">

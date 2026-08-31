@@ -1,8 +1,18 @@
 import { db, Playlist, Video, Progress } from './db';
 
 export async function addPlaylistLocally(playlist: Playlist, videos: Video[]) {
+  const now = new Date().toISOString();
+  
   await db.transaction('rw', db.playlists, db.videos, async () => {
-    await db.playlists.put(playlist);
+    const existing = await db.playlists.get(playlist.id);
+    const enrichedPlaylist = {
+      ...playlist,
+      date_added: existing?.date_added || playlist.date_added || now,
+      updated_at: now,
+      deleted_at: null
+    };
+    
+    await db.playlists.put(enrichedPlaylist as Playlist);
     await db.videos.bulkPut(videos);
   });
 }
