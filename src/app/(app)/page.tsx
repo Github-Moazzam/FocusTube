@@ -77,7 +77,7 @@ export default function LibraryPage() {
     <div className="space-y-8 pb-12">
       <section className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-sm">
         <h2 className="text-xl font-semibold mb-4 text-zinc-100">Add content</h2>
-        <form onSubmit={handleAdd} className="flex gap-3 max-w-2xl">
+        <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-3 max-w-2xl">
           <input
             type="text"
             value={urlInput}
@@ -89,7 +89,7 @@ export default function LibraryPage() {
           <button
             type="submit"
             disabled={isImporting || !urlInput.trim()}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800/50 disabled:text-zinc-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800/50 disabled:text-zinc-400 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 whitespace-nowrap sm:w-auto"
           >
             {isImporting ? (
               <RefreshCw className="w-5 h-5 animate-spin" />
