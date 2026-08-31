@@ -19,8 +19,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-import { PWARegister } from "@/components/PWARegister";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="bg-zinc-950 text-zinc-50 antialiased min-h-screen selection:bg-blue-500/30">
-        <PWARegister />
         {children}
       </body>
     </html>

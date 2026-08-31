@@ -1,1 +1,1 @@
-self.addEventListener("install", () => self.skipWaiting()); self.addEventListener("activate", () => self.clients.claim()); self.addEventListener("fetch", (e) => {});
+const CACHE_NAME = "focustube-v1";`nself.addEventListener("install", (e) => {`n  e.waitUntil(`n    caches.open(CACHE_NAME).then((cache) => cache.addAll(["/"]))`n  );`n  self.skipWaiting();`n});`nself.addEventListener("activate", (e) => {`n  self.clients.claim();`n});`nself.addEventListener("fetch", (e) => {`n  e.respondWith(`n    fetch(e.request).catch(() => caches.match(e.request))`n  );`n});

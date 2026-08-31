@@ -28,25 +28,25 @@ export function SyncStatus() {
       {status === 'idle' && (
         <>
           <Cloud className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Synced</span>
+          <span>Synced</span>
         </>
       )}
       {status === 'syncing' && (
         <>
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          <span className="hidden sm:inline">Syncing...</span>
+          <span>Syncing...</span>
         </>
       )}
       {status === 'offline' && (
         <>
           <CloudOff className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Offline</span>
+          <span>Offline</span>
         </>
       )}
       {status === 'error' && (
         <>
           <AlertCircle className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Error</span>
+          <span>Sync Error</span>
         </>
       )}
     </div>
