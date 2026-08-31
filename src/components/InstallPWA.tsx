@@ -3,15 +3,28 @@
 import { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 
+declare global {
+  interface Window {
+    deferredPWAEvent: any;
+  }
+}
+
 export function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
+    // Check if the event fired before React loaded
+    if (window.deferredPWAEvent) {
+      setDeferredPrompt(window.deferredPWAEvent);
+      setIsInstallable(true);
+    }
+
     const handleBeforeInstallPrompt = (e: any) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
+      window.deferredPWAEvent = e;
       setDeferredPrompt(e);
       // Update UI notify the user they can install the PWA
       setIsInstallable(true);
