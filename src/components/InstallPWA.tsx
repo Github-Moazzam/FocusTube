@@ -31,7 +31,10 @@ export function InstallPWA() {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      alert("App is either already installed, or your browser doesn't support this feature (like iOS Safari). You can still install via your browser's share/menu options!");
+      return;
+    }
     
     // Show the install prompt
     deferredPrompt.prompt();
@@ -45,12 +48,10 @@ export function InstallPWA() {
     }
   };
 
-  if (!isInstallable) return null;
-
   return (
     <button 
       onClick={handleInstallClick}
-      className='p-2 text-blue-400 hover:text-blue-300 hover:bg-zinc-800 rounded-lg transition-colors flex items-center gap-1'
+      className={`p-2 rounded-lg transition-colors flex items-center gap-1 ${isInstallable ? 'text-blue-400 hover:text-blue-300 hover:bg-zinc-800' : 'text-zinc-500 hover:bg-zinc-800/50'}`}
       aria-label='Install App'
       title='Install App'
     >
