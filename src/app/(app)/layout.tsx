@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SyncStatus } from '@/components/SyncStatus';
 import { Settings, Library } from 'lucide-react';
+import { InstallPWA } from '@/components/InstallPWA';
 
 export default function AppLayout({
   children,
@@ -19,6 +20,7 @@ export default function AppLayout({
           <div className="flex items-center gap-4">
             <SyncStatus />
             <nav className="flex items-center gap-1">
+              <InstallPWA />
               <Link 
                 href="/" 
                 className="p-2 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 rounded-lg transition-colors"
